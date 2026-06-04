@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LaunchPad AI — Real-Time Agentic Product Incubator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Ambient background layers -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91 0z"/>
+          <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+          <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
+          <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">LaunchPad<span class="brand-accent"> AI</span></span>
+        <span class="brand-sub">Real-Time Agentic Product Incubator</span>
+      </div>
+    </div>
+    <div class="status-chip" id="connection-status">
+      <span class="status-dot"></span>
+      <span class="status-label">Ready</span>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <!-- ===================== LEFT: Agent Control Center ===================== -->
+    <section class="panel control-center">
+      <div class="card config-card">
+        <label class="field-label">Product Idea</label>
+        <textarea id="idea-input" class="idea-input" rows="3"
+          placeholder="Describe your product in a single sentence…"></textarea>
+
+        <button class="example-btn" id="example-btn" type="button">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.3h6c0-1 .4-1.8 1-2.3A7 7 0 0 0 12 2Z"/></svg>
+          Load example idea
+        </button>
+
+        <div class="config-row">
+          <div class="mode-toggle">
+            <span class="toggle-label">Live API</span>
+            <label class="switch">
+              <input type="checkbox" id="replay-toggle" checked />
+              <span class="slider"></span>
+            </label>
+            <span class="toggle-label toggle-active">Stage-Safe Replay</span>
+          </div>
+        </div>
+
+        <button class="launch-btn" id="launch-btn" type="button">
+          <span class="launch-glow"></span>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91 0z"/>
+            <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+          </svg>
+          <span class="launch-text">Launch Project</span>
+        </button>
+      </div>
+
+      <!-- Pipeline -->
+      <div class="pipeline" id="pipeline">
+        <!-- SVG connectors overlay -->
+        <svg class="pipeline-connectors" id="pipeline-connectors" preserveAspectRatio="none">
+          <path id="path-0" class="connector-line" d="" />
+          <path id="path-1" class="connector-line" d="" />
+          <path id="path-2" class="connector-line" d="" />
+        </svg>
+
+        <!-- Agent cards (generated structure, static for clarity) -->
+        <article class="agent-card idle" id="agent-researcher" data-accent="#06B6D4">
+          <div class="agent-head">
+            <div class="agent-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            </div>
+            <div class="agent-meta">
+              <span class="agent-name">Researcher</span>
+              <span class="agent-role">Market Intelligence</span>
+            </div>
+            <div class="agent-status">
+              <span class="typing-dots"><i></i><i></i><i></i></span>
+              <svg class="check-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              <span class="warn-badge">API Offline – Using Cached Backup</span>
+            </div>
+          </div>
+          <pre class="agent-output" id="output-researcher"></pre>
+        </article>
+
+        <article class="agent-card idle" id="agent-strategist" data-accent="#8B5CF6">
+          <div class="agent-head">
+            <div class="agent-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>
+            </div>
+            <div class="agent-meta">
+              <span class="agent-name">Strategist</span>
+              <span class="agent-role">Brand Positioning</span>
+            </div>
+            <div class="agent-status">
+              <span class="typing-dots"><i></i><i></i><i></i></span>
+              <svg class="check-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              <span class="warn-badge">API Offline – Using Cached Backup</span>
+            </div>
+          </div>
+          <pre class="agent-output" id="output-strategist"></pre>
+        </article>
+
+        <article class="agent-card idle" id="agent-copywriter" data-accent="#EC4899">
+          <div class="agent-head">
+            <div class="agent-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+            </div>
+            <div class="agent-meta">
+              <span class="agent-name">Copywriter</span>
+              <span class="agent-role">Conversion Copy</span>
+            </div>
+            <div class="agent-status">
+              <span class="typing-dots"><i></i><i></i><i></i></span>
+              <svg class="check-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              <span class="warn-badge">API Offline – Using Cached Backup</span>
+            </div>
+          </div>
+          <pre class="agent-output" id="output-copywriter"></pre>
+        </article>
+
+        <article class="agent-card idle" id="agent-builder" data-accent="#10B981">
+          <div class="agent-head">
+            <div class="agent-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg>
+            </div>
+            <div class="agent-meta">
+              <span class="agent-name">Web Builder</span>
+              <span class="agent-role">Frontend Engineer</span>
+            </div>
+            <div class="agent-status">
+              <span class="typing-dots"><i></i><i></i><i></i></span>
+              <svg class="check-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              <span class="warn-badge">API Offline – Using Cached Backup</span>
+            </div>
+          </div>
+          <pre class="agent-output" id="output-builder"></pre>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===================== RIGHT: Visual Sandbox ===================== -->
+    <section class="panel sandbox">
+      <div class="browser-frame">
+        <div class="browser-bar">
+          <div class="window-buttons">
+            <span class="wb wb-red"></span>
+            <span class="wb wb-yellow"></span>
+            <span class="wb wb-green"></span>
+          </div>
+          <div class="url-bar">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span id="url-text">https://launchpad.ai/sandbox</span>
+          </div>
+        </div>
+        <div class="browser-viewport" id="browser-viewport">
+          <div class="placeholder" id="placeholder">
+            <div class="blueprint-cube">
+              <svg viewBox="0 0 120 120" width="120" height="120" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path class="bp-line" d="M60 12 L108 38 L108 86 L60 112 L12 86 L12 38 Z"/>
+                <path class="bp-line" d="M60 12 L60 60 L12 38 M60 60 L108 38 M60 60 L60 112"/>
+              </svg>
+            </div>
+            <p class="placeholder-text">Awaiting Code Input…</p>
+            <p class="placeholder-sub">The generated landing page will materialize here</p>
+          </div>
+          <iframe id="sandbox-frame" class="sandbox-frame" title="Generated landing page"></iframe>
+          <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
