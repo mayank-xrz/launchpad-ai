@@ -49,7 +49,8 @@ async def index():
 
 # ---- Replay-mode pacing (server-side artificial delay) -------------------
 REPLAY_CHUNK = 6           # characters per emitted chunk
-REPLAY_DELAY = 0.018       # seconds between chunks (~330 char/s raw; UI paces to 40/s)
+REPLAY_DELAY = 0.020       # seconds between chunks; tuned so the full 4-agent
+                           # run lands in the ~60-75s stage window
 
 
 async def run_replay(ws: WebSocket, idea: str):

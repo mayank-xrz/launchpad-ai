@@ -37,15 +37,22 @@ let ws = null;
 let running = false;
 
 /* ============================================================
-   Token pacing queue — max ~40 chars/sec, cinematic readability.
-   Each agent gets its own queue; tokens drain at a steady rate.
+   Token pacing queue — cinematic ~40 chars/sec base rate, but
+   ADAPTIVE: when a large backlog builds (e.g. the Web Builder's
+   12KB HTML, which streams far faster than 40 c/s), the drain
+   speeds up so the queue is always cleared within ~1.5s. This
+   keeps a smooth character-by-character feel for trickling prose
+   while preventing a multi-minute backlog from blocking the reveal.
    ============================================================ */
+const TICK_MS = 50;                 // 20 ticks/sec
+const BASE_CHARS_PER_TICK = 2;      // ~40 chars/sec when keeping up
+const CATCHUP_TICKS = 30;           // clear any backlog within ~1.5s
+
 class Pacer {
-  constructor(targetEl, charsPerSec = 40) {
+  constructor(targetEl) {
     this.el = targetEl;
     this.buffer = "";
     this.interval = null;
-    this.charsPerTick = Math.max(1, Math.round(charsPerSec / 10)); // 10 ticks/sec
     this.cursor = document.createElement("span");
     this.cursor.className = "cursor";
     this.onDrain = null;
@@ -57,7 +64,7 @@ class Pacer {
   start() {
     if (this.interval) return;
     this.el.appendChild(this.cursor);
-    this.interval = setInterval(() => this.tick(), 100);
+    this.interval = setInterval(() => this.tick(), TICK_MS);
   }
   tick() {
     if (this.buffer.length === 0) {
@@ -66,8 +73,14 @@ class Pacer {
       if (this.onDrain) this.onDrain();
       return;
     }
-    const slice = this.buffer.slice(0, this.charsPerTick);
-    this.buffer = this.buffer.slice(this.charsPerTick);
+    // Drain at the base readable rate, but accelerate to clear any
+    // backlog within CATCHUP_TICKS so we never fall far behind.
+    const n = Math.max(
+      BASE_CHARS_PER_TICK,
+      Math.ceil(this.buffer.length / CATCHUP_TICKS)
+    );
+    const slice = this.buffer.slice(0, n);
+    this.buffer = this.buffer.slice(n);
     this.cursor.insertAdjacentText("beforebegin", slice);
     this.el.scrollTop = this.el.scrollHeight;
   }
